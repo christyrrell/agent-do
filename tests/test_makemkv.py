@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tests for agent-makemkv — MakeMKV (makemkvcon) rip CLI wrapper.
+"""Tests for the media family's makemkv provider — MakeMKV (makemkvcon) rip CLI wrapper.
 
 Covers: help, disc normalization, robot-output parsing (drives/info/version),
 minlength title filtering, rip→verify flow, dry-run, JSON output, and the
@@ -16,7 +16,7 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TOOL = ROOT / "tools" / "agent-makemkv"
+TOOL = ROOT / "tools" / "agent-media" / "providers" / "makemkv"
 
 # A mock makemkvcon that emits realistic robot-mode output. For rip/backup it
 # writes a fake artifact into the output directory (the last argument).
@@ -129,7 +129,7 @@ def main() -> int:
     def test_help():
         r = run_tool("--help", bin_override=None)
         require(r.returncode == 0, "help should exit 0")
-        require("agent-makemkv" in r.stdout, "help should name the tool")
+        require("media provider: makemkv" in r.stdout, "help should name the provider")
         require("rip <disc>" in r.stdout, "help should document rip")
 
     check("--help lists commands", test_help)

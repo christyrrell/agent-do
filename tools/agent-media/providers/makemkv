@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-# agent-makemkv - Rip DVDs and Blu-rays to MKV via MakeMKV's headless CLI (makemkvcon)
+# media provider: makemkv - Rip DVDs and Blu-rays to MKV via MakeMKV's headless CLI (makemkvcon)
+#
+# Provider engine behind `agent-do media rip|drives|scan` (see tools/agent-media).
+# Reachable in full through the `agent-do media makemkv <command>` passthrough.
 #
 # Wraps makemkvcon "robot mode" (-r), whose structured output is purpose-built
 # for automation. Follows the universal Connect -> Snapshot -> Interact -> Verify:
@@ -14,13 +17,13 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 
 if [[ -f "$REPO_ROOT/lib/json-output.sh" ]]; then
     # shellcheck source=lib/json-output.sh
     source "$REPO_ROOT/lib/json-output.sh"
 else
-    echo "agent-makemkv: missing $REPO_ROOT/lib/json-output.sh" >&2
+    echo "media/makemkv: missing $REPO_ROOT/lib/json-output.sh" >&2
     exit 1
 fi
 
@@ -32,7 +35,10 @@ MINLENGTH=""
 
 show_help() {
     cat << 'EOF'
-agent-makemkv - Rip DVDs and Blu-rays to MKV (wraps makemkvcon robot mode)
+media provider: makemkv - Rip DVDs and Blu-rays to MKV (wraps makemkvcon robot mode)
+
+Family surface: agent-do media drives|scan|rip route here; every command below is
+reachable as agent-do media makemkv <command>.
 
 Commands:
   drives                                 List optical drives and loaded discs
@@ -58,14 +64,14 @@ Environment:
   AGENT_MAKEMKV_BIN                      Path to makemkvcon (else PATH, else MakeMKV.app)
 
 Examples:
-  agent-makemkv drives
-  agent-makemkv info disc:0
-  agent-makemkv info 0 --json
-  agent-makemkv rip disc:0 all ~/rips
-  agent-makemkv rip disc:0 3 ~/rips
-  agent-makemkv backup disc:0 ~/backup --json
-  agent-makemkv verify ~/rips
-  agent-makemkv snapshot
+  agent-do media makemkv drives
+  agent-do media makemkv info disc:0
+  agent-do media makemkv info 0 --json
+  agent-do media makemkv rip disc:0 all ~/rips
+  agent-do media makemkv rip disc:0 3 ~/rips
+  agent-do media makemkv backup disc:0 ~/backup --json
+  agent-do media makemkv verify ~/rips
+  agent-do media makemkv snapshot
 EOF
 }
 

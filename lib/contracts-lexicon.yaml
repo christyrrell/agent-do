@@ -510,3 +510,13 @@ overrides:
   ide:
     goto: {beats: [interact], attributes: [own_state]}
     open: {beats: [connect], attributes: [own_state]}
+  # ── media family (mn-9dbb48): neutral verbs over the makemkv/handbrake providers.
+  # The passthroughs are polymorphic like meetings' zoom/meet/teams; the family's
+  # convert/batch inherit the transcode engine's long-running shape.
+  media:
+    presets: {beats: [snapshot]}
+    providers: {beats: [snapshot]}
+    convert: {beats: [interact], attributes: [long_running]}
+    batch: {beats: [interact], attributes: [long_running, composite]}
+    makemkv: {beats: [snapshot, interact], attributes: [polymorphic]}
+    handbrake: {beats: [snapshot, interact], attributes: [polymorphic]}
